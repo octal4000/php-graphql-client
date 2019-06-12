@@ -16,17 +16,17 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
     /**
      * @var Query
      */
-    private $query;
+    protected $query;
 
     /**
      * @var array
      */
-    private $selectionSet;
+    protected $selectionSet;
 
     /**
      * @var array
      */
-    private $argumentsList;
+    protected $argumentsList;
 
     /**
      * QueryBuilder constructor.
@@ -89,5 +89,45 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
         }
 
         return $this;
+    }
+
+    /***
+     * @return array
+     */
+    protected function getSelectionSet()
+    {
+        return $this->selectionSet;
+    }
+
+    /***
+     * Returns existing selction object if exists
+     * @param $object
+     * @return mixed
+     */
+    protected function getSelectionObjectIfExists($object)
+    {
+        foreach ($this->getSelectionSet() as $selection_object) {
+            if ($selection_object instanceof $object) {
+                unset($object);
+                return $selection_object;
+            }
+        }
+        return $object;
+    }
+
+    /***
+     * Returns true if passed selection object already exists
+     * @param Object $object
+     * @return Bool
+     */
+    protected function selectionObjectExists($object)
+    {
+        foreach ($this->getSelectionSet() as $selection_object) {
+            if ($selection_object instanceof $object) {
+                unset($object);
+                return true;
+            }
+        }
+        return false;
     }
 }
