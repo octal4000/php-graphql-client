@@ -1,5 +1,5 @@
 {
-    "name": "gmostafa/php-graphql-client",
+    "name": "octal4000/php-graphql-client",
     "description": "GraphQL client and query builder.",
     "type": "library",
     "license": "MIT",
