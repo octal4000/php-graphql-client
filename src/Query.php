@@ -198,10 +198,18 @@ class Query
     }
 
     /**
-     *
+     * 
      */
     private function setAsNested()
     {
         $this->isNested = true;
+    }
+
+    /***
+     * @return string
+     */
+    public function getObjectName()
+    {
+        return $this->object;
     }
 }

@@ -28,6 +28,9 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      */
     protected $argumentsList;
 
+    /** @var array  */
+    protected $required_multi = ['MoneyV2QueryObject'];
+
     /**
      * QueryBuilder constructor.
      *
@@ -106,12 +109,18 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      */
     protected function getSelectionObjectIfExists($object)
     {
-        foreach ($this->getSelectionSet() as $selection_object) {
+        $selection_set = $this->getSelectionSet();
+        $selection_object = array_pop($selection_set);
+//        foreach ($selection_set as $selection_object) {
             if ($selection_object instanceof $object) {
+                if (strpos(get_class($object), 'MoneyV2QueryObject') !== false
+                    && $object->getQueryObjectName() != $selection_object->getQueryObjectName()) {
+                    return $object; // return new object
+                }
                 unset($object);
                 return $selection_object;
             }
-        }
+//        }
         return $object;
     }
 
@@ -122,12 +131,26 @@ abstract class AbstractQueryBuilder implements QueryBuilderInterface
      */
     protected function selectionObjectExists($object)
     {
-        foreach ($this->getSelectionSet() as $selection_object) {
+        $selection_set = $this->getSelectionSet();
+        $selection_object = array_pop($selection_set);
+//        foreach ($this->getSelectionSet() as $selection_object) {
             if ($selection_object instanceof $object) {
+                if (strpos(get_class($object), 'MoneyV2QueryObject') !== false
+                    && $object->getQueryObjectName() != $selection_object->getQueryObjectName()) {
+                    return false;
+                }
                 unset($object);
                 return true;
             }
-        }
+//        }
         return false;
+    }
+
+    /***
+     * @return string
+     */
+    public function getQueryObjectName()
+    {
+        return $this->query->getObjectName();
     }
 }
